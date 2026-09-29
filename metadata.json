@@ -1,0 +1,6 @@
+{
+  "name": "Industrial Spare Parts Automation System",
+  "description": "An automated inventory management, defect-return tracking, and bidirectional conveyor sorting system with ESP32-S3 and ESP32-C3 communication and rack indication.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

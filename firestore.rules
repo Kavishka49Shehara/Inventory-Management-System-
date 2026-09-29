@@ -1,0 +1,83 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper: Valid Document ID
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Helper: Validate Non-Negative Integer
+    function isNonNegativeNumber(num) {
+      return (num is int || num is float) && num >= 0;
+    }
+
+    // 1. PRODUCTS COLLECTION
+    match /products/{productId} {
+      allow read: if true;
+      allow create, update: if isValidId(productId)
+        && request.resource.data.keys().hasAll(['id', 'product_id', 'barcode', 'product_name', 'category', 'quantity', 'rack_location', 'sorting_bin'])
+        && request.resource.data.product_name is string && request.resource.data.product_name.size() > 0
+        && isNonNegativeNumber(request.resource.data.quantity)
+        && request.resource.data.sorting_bin in ['Bin 1', 'Bin 2', 'Bin 3']
+        && request.resource.data.category in ['Mechanical', 'Electrical', 'Other'];
+      allow delete: if isValidId(productId);
+    }
+
+    // 2. EMPLOYEES COLLECTION
+    match /employees/{employeeId} {
+      allow read: if true;
+      allow create, update: if isValidId(employeeId)
+        && request.resource.data.keys().hasAll(['id', 'employee_id', 'name', 'role', 'authorization_status'])
+        && request.resource.data.name is string && request.resource.data.name.size() > 0
+        && request.resource.data.role in ['ADMINISTRATOR', 'STOREKEEPER', 'EMPLOYEE']
+        && request.resource.data.authorization_status in ['Authorized', 'Unauthorized'];
+      allow delete: if isValidId(employeeId);
+    }
+
+    // 3. PART REQUESTS COLLECTION
+    match /requests/{requestId} {
+      allow read: if true;
+      allow create, update: if isValidId(requestId)
+        && request.resource.data.keys().hasAll(['id', 'request_id', 'employee_id', 'defective_product_id', 'replacement_product_id', 'status'])
+        && request.resource.data.status in [
+          'Pending',
+          'Defective Item Received',
+          'Sorting',
+          'Awaiting Storekeeper',
+          'Approved',
+          'Delivering',
+          'Completed',
+          'Rejected'
+        ];
+      allow delete: if isValidId(requestId);
+    }
+
+    // 4. TRANSACTIONS AUDIT COLLECTION
+    match /transactions/{transactionId} {
+      allow read: if true;
+      allow create: if isValidId(transactionId)
+        && request.resource.data.keys().hasAll(['id', 'transaction_id', 'replacement_product', 'quantity', 'date', 'status'])
+        && isNonNegativeNumber(request.resource.data.quantity);
+      allow update, delete: if false; // Immutable audit log
+    }
+
+    // 5. DEVICE STATUS (ESP32 TELEMETRY)
+    match /device_status/{deviceId} {
+      allow read: if true;
+      allow create, update: if isValidId(deviceId)
+        && request.resource.data.keys().hasAll(['id', 'device_name', 'device_status', 'conveyor_status'])
+        && request.resource.data.device_name in ['ESP32-C3', 'ESP32-S3'];
+      allow delete: if isValidId(deviceId);
+    }
+
+    // 6. ESP32 COMMAND LOGS
+    match /esp_logs/{logId} {
+      allow read: if true;
+      allow create: if isValidId(logId)
+        && request.resource.data.keys().hasAll(['id', 'timestamp', 'device', 'type'])
+        && request.resource.data.device in ['ESP32-C3', 'ESP32-S3'];
+      allow update, delete: if false; // Append-only hardware telemetry
+    }
+  }
+}

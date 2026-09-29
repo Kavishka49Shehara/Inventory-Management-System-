@@ -1,0 +1,153 @@
+{
+  "entities": {
+    "Employee": {
+      "title": "Employee",
+      "description": "Registered warehouse employees, storekeepers, and administrators",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "employee_id": { "type": "string" },
+        "name": { "type": "string" },
+        "username": { "type": "string" },
+        "password": { "type": "string" },
+        "role": { "type": "string", "enum": ["ADMINISTRATOR", "STOREKEEPER", "EMPLOYEE"] },
+        "barcode_id": { "type": "string" },
+        "department": { "type": "string" },
+        "position": { "type": "string" },
+        "authorization_status": { "type": "string", "enum": ["Authorized", "Unauthorized"] },
+        "contact": { "type": "string" },
+        "registered_at": { "type": "string" }
+      },
+      "required": ["id", "employee_id", "name", "role", "authorization_status"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "Warehouse spare parts and replacement components",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "product_id": { "type": "string" },
+        "barcode": { "type": "string" },
+        "product_name": { "type": "string" },
+        "category": { "type": "string", "enum": ["Mechanical", "Electrical", "Other"] },
+        "subcategory": { "type": "string" },
+        "description": { "type": "string" },
+        "quantity": { "type": "number" },
+        "minimum_stock": { "type": "number" },
+        "rack_location": { "type": "string" },
+        "sorting_bin": { "type": "string", "enum": ["Bin 1", "Bin 2", "Bin 3"] },
+        "status": { "type": "string", "enum": ["Available", "Low Stock", "Out of Stock"] }
+      },
+      "required": ["id", "product_id", "barcode", "product_name", "category", "quantity", "rack_location", "sorting_bin", "status"]
+    },
+    "PartRequest": {
+      "title": "PartRequest",
+      "description": "Defect return and part replacement workflows",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "request_id": { "type": "string" },
+        "employee_id": { "type": "string" },
+        "employee_name": { "type": "string" },
+        "department": { "type": "string" },
+        "defective_product_id": { "type": "string" },
+        "defective_product_name": { "type": "string" },
+        "replacement_product_id": { "type": "string" },
+        "replacement_product_name": { "type": "string" },
+        "rack_location": { "type": "string" },
+        "sorting_bin": { "type": "string", "enum": ["Bin 1", "Bin 2", "Bin 3"] },
+        "status": {
+          "type": "string",
+          "enum": [
+            "Pending",
+            "Defective Item Received",
+            "Sorting",
+            "Awaiting Storekeeper",
+            "Approved",
+            "Delivering",
+            "Completed",
+            "Rejected"
+          ]
+        },
+        "request_time": { "type": "string" },
+        "completion_time": { "type": "string" }
+      },
+      "required": ["id", "request_id", "employee_id", "defective_product_id", "replacement_product_id", "status", "request_time"]
+    },
+    "Transaction": {
+      "title": "Transaction",
+      "description": "Historical audit logs of part issuances and inventory adjustments",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "transaction_id": { "type": "string" },
+        "request_id": { "type": "string" },
+        "employee_id": { "type": "string" },
+        "employee_name": { "type": "string" },
+        "defective_product": { "type": "string" },
+        "replacement_product": { "type": "string" },
+        "quantity": { "type": "number" },
+        "rack_location": { "type": "string" },
+        "sorting_bin": { "type": "string", "enum": ["Bin 1", "Bin 2", "Bin 3"] },
+        "storekeeper_id": { "type": "string" },
+        "date": { "type": "string" },
+        "time": { "type": "string" },
+        "status": { "type": "string", "enum": ["Completed", "Rejected"] }
+      },
+      "required": ["id", "transaction_id", "replacement_product", "quantity", "date", "status"]
+    },
+    "DeviceStatus": {
+      "title": "DeviceStatus",
+      "description": "Real-time state and heartbeat of connected ESP32 hardware",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "device_name": { "type": "string", "enum": ["ESP32-C3", "ESP32-S3"] },
+        "device_status": { "type": "string", "enum": ["Online", "Offline"] },
+        "last_connection": { "type": "string" },
+        "conveyor_status": { "type": "string" },
+        "sensor_status": { "type": "string" }
+      },
+      "required": ["id", "device_name", "device_status", "conveyor_status"]
+    },
+    "ESP32CommandLog": {
+      "title": "ESP32CommandLog",
+      "description": "Sensor and conveyor telemetry packets sent and received by ESP32 microcontrollers",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "timestamp": { "type": "string" },
+        "device": { "type": "string", "enum": ["ESP32-C3", "ESP32-S3"] },
+        "type": { "type": "string", "enum": ["RECEIVED", "SENT"] },
+        "payload": { "type": "object" }
+      },
+      "required": ["id", "timestamp", "device", "type"]
+    }
+  },
+  "firestore": {
+    "/employees/{employeeId}": {
+      "schema": "Employee",
+      "description": "Collection of authorized personnel records and credentials"
+    },
+    "/products/{productId}": {
+      "schema": "Product",
+      "description": "Inventory items, stock counts, rack locations, and sorting bin mappings"
+    },
+    "/requests/{requestId}": {
+      "schema": "PartRequest",
+      "description": "Active and completed defect return replacement requests"
+    },
+    "/transactions/{transactionId}": {
+      "schema": "Transaction",
+      "description": "Completed inventory transactions and audit logs"
+    },
+    "/device_status/{deviceId}": {
+      "schema": "DeviceStatus",
+      "description": "Online telemetry and conveyor states for ESP32-C3 and ESP32-S3"
+    },
+    "/esp_logs/{logId}": {
+      "schema": "ESP32CommandLog",
+      "description": "Hardware command log stream"
+    }
+  }
+}

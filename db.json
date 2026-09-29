@@ -1,0 +1,351 @@
+{
+  "employees": [
+    {
+      "department": "System Engineering",
+      "authorization_status": "Authorized",
+      "name": "Anjana",
+      "registered_at": "2026-01-10T08:00:00Z",
+      "position": "System Engineer",
+      "employee_id": "EMP001",
+      "role": "EMPLOYEE",
+      "username": "Anjana SE",
+      "id": "emp-1",
+      "contact": "+1 (555) 100-1111",
+      "barcode_id": "EMP001",
+      "password": "1111"
+    },
+    {
+      "barcode_id": "EMP002",
+      "employee_id": "EMP002",
+      "registered_at": "2026-02-15T09:30:00Z",
+      "password": "2222",
+      "username": "Thisraka M",
+      "authorization_status": "Authorized",
+      "contact": "+1 (555) 200-2222",
+      "name": "Thisraka",
+      "position": "Maintenance Engineer",
+      "role": "EMPLOYEE",
+      "id": "emp-2",
+      "department": "Maintenance"
+    },
+    {
+      "barcode_id": "EMP003",
+      "employee_id": "EMP003",
+      "position": "Operations Officer",
+      "id": "emp-3",
+      "registered_at": "2026-03-20T11:00:00Z",
+      "authorization_status": "Authorized",
+      "username": "Nikini O",
+      "contact": "+1 (555) 300-3333",
+      "role": "EMPLOYEE",
+      "password": "3333",
+      "department": "Operations",
+      "name": "Nikini"
+    },
+    {
+      "department": "Storekeeping",
+      "position": "Head Storekeeper",
+      "id": "emp-4",
+      "contact": "+1 (555) 400-4444",
+      "registered_at": "2026-04-01T08:00:00Z",
+      "role": "STOREKEEPER",
+      "password": "4444",
+      "employee_id": "STK001",
+      "name": "Inshaf",
+      "authorization_status": "Authorized",
+      "barcode_id": "STK001",
+      "username": "SK inshaf"
+    },
+    {
+      "department": "System Administration",
+      "password": "1234",
+      "username": "Adm Kavishka",
+      "registered_at": "2026-05-01T08:00:00Z",
+      "position": "System Administrator",
+      "id": "emp-5",
+      "contact": "+1 (555) 500-1234",
+      "employee_id": "ADM001",
+      "name": "Kavishka",
+      "authorization_status": "Authorized",
+      "barcode_id": "ADM001",
+      "role": "ADMINISTRATOR"
+    }
+  ],
+  "products": [
+    {
+      "status": "Available",
+      "category": "Mechanical",
+      "subcategory": "Bearings",
+      "barcode": "890123456789",
+      "quantity": 31,
+      "product_name": "Bearings",
+      "description": "Deep groove ball bearings and roller assemblies for mechanical conveyor shafts.",
+      "id": "prod-1",
+      "sorting_bin": "Bin 1",
+      "product_id": "P-001",
+      "rack_location": "B1",
+      "minimum_stock": 5
+    },
+    {
+      "description": "Electromagnetic actuator coils and precision stainless drive shafts.",
+      "id": "prod-2",
+      "quantity": 15,
+      "sorting_bin": "Bin 1",
+      "barcode": "890123456790",
+      "status": "Available",
+      "rack_location": "B2",
+      "minimum_stock": 4,
+      "product_id": "P-002",
+      "product_name": "Coils & Shaft",
+      "subcategory": "Coils & Shaft",
+      "category": "Mechanical"
+    },
+    {
+      "quantity": 12,
+      "barcode": "890123456791",
+      "sorting_bin": "Bin 2",
+      "status": "Available",
+      "product_name": "Motors",
+      "product_id": "P-003",
+      "description": "24V DC stepper and servo drive motors for automated sorting conveyors.",
+      "id": "prod-3",
+      "minimum_stock": 3,
+      "subcategory": "Motors",
+      "rack_location": "E1",
+      "category": "Electrical"
+    },
+    {
+      "product_name": "Drivers & Sensors",
+      "subcategory": "Drivers and Sensors",
+      "quantity": 10,
+      "rack_location": "E2",
+      "product_id": "P-004",
+      "category": "Electrical",
+      "barcode": "890123456792",
+      "status": "Available",
+      "minimum_stock": 3,
+      "id": "prod-4",
+      "sorting_bin": "Bin 2",
+      "description": "High-current motor controller driver boards, PWM modules, optical encoders, and photoelectric sensors."
+    }
+  ],
+  "requests": [
+    {
+      "id": "req-1790656295766",
+      "request_id": "REQ1004",
+      "employee_id": "EMP002",
+      "employee_name": "Mechanic (Workshop)",
+      "department": "Maintenance Workshop",
+      "defective_product_id": "P-001",
+      "defective_product_name": "Bearings",
+      "replacement_product_id": "P-001",
+      "replacement_product_name": "Bearings",
+      "rack_location": "B1",
+      "sorting_bin": "Bin 1",
+      "status": "Completed",
+      "request_time": "2026-09-29T04:31:35.766Z",
+      "completion_time": "2026-09-29T04:31:45.606Z"
+    },
+    {
+      "replacement_product_id": "P-002",
+      "id": "req-3",
+      "defective_product_id": "P-002",
+      "rack_location": "B2",
+      "department": "System Engineering",
+      "employee_name": "Anjana",
+      "completion_time": "2026-08-12T14:56:47.549Z",
+      "request_time": "2026-08-12T14:26:00.156Z",
+      "status": "Completed",
+      "sorting_bin": "Bin 1",
+      "employee_id": "EMP001",
+      "request_id": "REQ003",
+      "defective_product_name": "Coils & Shaft",
+      "replacement_product_name": "Coils & Shaft"
+    },
+    {
+      "completion_time": "2026-07-15T14:22:00Z",
+      "request_id": "REQ002",
+      "id": "req-2",
+      "defective_product_name": "Motors",
+      "department": "Maintenance",
+      "rack_location": "E1",
+      "defective_product_id": "P-003",
+      "sorting_bin": "Bin 2",
+      "status": "Completed",
+      "replacement_product_name": "Motors",
+      "employee_name": "Thisraka",
+      "replacement_product_id": "P-003",
+      "request_time": "2026-07-15T14:10:00Z",
+      "employee_id": "EMP002"
+    },
+    {
+      "defective_product_name": "Bearings",
+      "request_time": "2026-07-15T09:30:00Z",
+      "employee_id": "EMP001",
+      "rack_location": "B1",
+      "department": "System Engineering",
+      "id": "req-1",
+      "defective_product_id": "P-001",
+      "sorting_bin": "Bin 1",
+      "status": "Completed",
+      "request_id": "REQ001",
+      "replacement_product_name": "Bearings",
+      "completion_time": "2026-07-15T09:45:00Z",
+      "employee_name": "Anjana",
+      "replacement_product_id": "P-001"
+    }
+  ],
+  "transactions": [
+    {
+      "id": "tx-1790656305606",
+      "transaction_id": "TX1006",
+      "request_id": "REQ1004",
+      "employee_id": "EMP002",
+      "employee_name": "Mechanic (Workshop)",
+      "defective_product": "Bearings",
+      "replacement_product": "Bearings",
+      "quantity": 1,
+      "rack_location": "B1",
+      "sorting_bin": "Bin 1",
+      "storekeeper_id": "STK001",
+      "date": "2026-09-29",
+      "time": "04:31:45",
+      "status": "Completed"
+    },
+    {
+      "rack_location": "B1",
+      "storekeeper_id": "Kavishka (ADMINISTRATOR)",
+      "quantity": 10,
+      "date": "2026-09-25",
+      "time": "18:23:55",
+      "request_id": "QR-SCAN-P-001",
+      "employee_id": "Kavishka (ADMINISTRATOR)",
+      "id": "tx-1790360635009",
+      "defective_product": "N/A",
+      "replacement_product": "Bearings",
+      "employee_name": "Kavishka (ADMINISTRATOR)",
+      "status": "Completed",
+      "transaction_id": "TX-QR-635009",
+      "sorting_bin": "Bin 1"
+    },
+    {
+      "storekeeper_id": "Storekeeper QR Scan",
+      "time": "18:02:27",
+      "status": "Completed",
+      "employee_name": "Storekeeper QR Scan",
+      "replacement_product": "Bearings",
+      "date": "2026-09-25",
+      "defective_product": "N/A",
+      "rack_location": "B1",
+      "sorting_bin": "Bin 1",
+      "request_id": "QR-SCAN-P-001",
+      "employee_id": "Storekeeper QR Scan",
+      "quantity": 2,
+      "transaction_id": "TX-QR-347279",
+      "id": "tx-1790359347279"
+    },
+    {
+      "date": "2026-08-12",
+      "rack_location": "B2",
+      "storekeeper_id": "STK001",
+      "defective_product": "Coils & Shaft",
+      "status": "Completed",
+      "time": "14:56:47",
+      "employee_id": "EMP001",
+      "request_id": "REQ003",
+      "id": "tx-1786546607549",
+      "quantity": 1,
+      "transaction_id": "TX1003",
+      "replacement_product": "Coils & Shaft",
+      "employee_name": "Anjana",
+      "sorting_bin": "Bin 1"
+    },
+    {
+      "transaction_id": "TX002",
+      "employee_name": "Thisraka",
+      "status": "Completed",
+      "quantity": 1,
+      "request_id": "REQ002",
+      "time": "14:22:00",
+      "defective_product": "Motors",
+      "employee_id": "EMP002",
+      "sorting_bin": "Bin 2",
+      "replacement_product": "Motors",
+      "date": "2026-07-15",
+      "storekeeper_id": "STK001",
+      "id": "tx-2",
+      "rack_location": "E1"
+    },
+    {
+      "request_id": "REQ001",
+      "id": "tx-1",
+      "replacement_product": "Bearings",
+      "rack_location": "B1",
+      "defective_product": "Bearings",
+      "status": "Completed",
+      "transaction_id": "TX001",
+      "storekeeper_id": "STK001",
+      "time": "09:45:00",
+      "employee_id": "EMP001",
+      "employee_name": "Anjana",
+      "quantity": 1,
+      "sorting_bin": "Bin 1",
+      "date": "2026-07-15"
+    }
+  ],
+  "device_status": [
+    {
+      "device_status": "Online",
+      "last_connection": "2026-08-12T14:56:00.156Z",
+      "device_name": "ESP32-C3",
+      "sensor_status": "RFID Reader Active | Barcode Reader Ready",
+      "conveyor_status": "IDLE",
+      "id": "dev-1"
+    },
+    {
+      "last_connection": "2026-09-29T04:31:45.606Z",
+      "device_name": "ESP32-S3",
+      "device_status": "Online",
+      "conveyor_status": "DELIVERING REPLACEMENT",
+      "sensor_status": "Conveyor: REVERSE (10s) | Gates: ALL CLOSED | Delivering new Bearings from Rack B1 to Mechanic | LED OFF",
+      "id": "dev-2"
+    }
+  ],
+  "esp_logs": [
+    {
+      "id": "log-1790360635009-vrq0",
+      "device": "ESP32-C3",
+      "type": "RECEIVED",
+      "timestamp": "2026-09-25T18:23:55.009Z",
+      "payload": {
+        "action": "ADD_STOCK",
+        "user": "Kavishka (ADMINISTRATOR)",
+        "event": "QR_INVENTORY_SCAN_UPDATE",
+        "new_quantity": 32,
+        "notes": "Stock Restock / Delivery Intake",
+        "delta": 10,
+        "product_id": "P-001"
+      }
+    },
+    {
+      "id": "log-1",
+      "device": "ESP32-C3",
+      "timestamp": "2026-08-12T14:56:00.156Z",
+      "payload": {
+        "status": "OK",
+        "event": "SYSTEM_BOOT"
+      },
+      "type": "RECEIVED"
+    },
+    {
+      "id": "log-2",
+      "type": "RECEIVED",
+      "payload": {
+        "status": "SUCCESS",
+        "command": "CONVEYOR_TEST"
+      },
+      "device": "ESP32-S3",
+      "timestamp": "2026-08-12T14:56:00.156Z"
+    }
+  ]
+}
