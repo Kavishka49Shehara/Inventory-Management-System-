@@ -12,6 +12,7 @@ import SettingsView from './components/SettingsView.js';
 import LoginPortalModal, { UserSession } from './components/LoginPortalModal.js';
 import QRScannerModal from './components/QRScannerModal.js';
 import ProductQRLabelModal from './components/ProductQRLabelModal.js';
+import ComponentQRSheetModal from './components/ComponentQRSheetModal.js';
 import StorekeeperOperationBanner from './components/StorekeeperOperationBanner.js';
 import { Key, UserCheck, QrCode, Camera, Wrench, Package } from 'lucide-react';
 import { 
@@ -41,6 +42,7 @@ export default function App() {
   });
   const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
   const [isGlobalQRScannerOpen, setIsGlobalQRScannerOpen] = useState<boolean>(false);
+  const [isComponentQRSheetOpen, setIsComponentQRSheetOpen] = useState<boolean>(false);
   const [scannerMode, setScannerMode] = useState<'MECHANIC_DEFECT' | 'STOREKEEPER_ISSUE' | 'INVENTORY_MANAGE'>('MECHANIC_DEFECT');
   const [globalQRLabelProduct, setGlobalQRLabelProduct] = useState<Product | null>(null);
 
@@ -318,6 +320,17 @@ export default function App() {
               <span className="md:hidden">Issue</span>
             </button>
 
+            {/* Scannable Component QR Codes Sheet Button */}
+            <button
+              onClick={() => setIsComponentQRSheetOpen(true)}
+              className="bg-indigo-500/15 hover:bg-indigo-500/25 text-indigo-300 border border-indigo-500/35 px-2.5 py-1.5 rounded-lg text-xs font-mono font-bold uppercase transition-all flex items-center gap-1.5 shadow-sm"
+              title="View, Test, and Print All Scannable Component QR Codes"
+            >
+              <QrCode className="w-3.5 h-3.5 text-indigo-400" />
+              <span className="hidden lg:inline">Component QRs</span>
+              <span className="lg:hidden">QRs</span>
+            </button>
+
             {/* Quick Camera & QR Barcode Scanner Button */}
             <button
               onClick={() => openScannerWithMode('INVENTORY_MANAGE')}
@@ -379,6 +392,7 @@ export default function App() {
                   onRefreshData={refreshData}
                   currentUser={currentUser}
                   onOpenScanner={() => setIsGlobalQRScannerOpen(true)}
+                  onOpenQRSheet={() => setIsComponentQRSheetOpen(true)}
                 />
               )}
 
@@ -471,6 +485,18 @@ export default function App() {
         onClose={() => setGlobalQRLabelProduct(null)}
         onOpenScanner={() => {
           setGlobalQRLabelProduct(null);
+          setIsGlobalQRScannerOpen(true);
+        }}
+      />
+
+      {/* Scannable Component QR Codes Sheet & Gallery Modal */}
+      <ComponentQRSheetModal
+        isOpen={isComponentQRSheetOpen}
+        onClose={() => setIsComponentQRSheetOpen(false)}
+        products={products}
+        employees={employees}
+        onOpenScanner={() => {
+          setIsComponentQRSheetOpen(false);
           setIsGlobalQRScannerOpen(true);
         }}
       />

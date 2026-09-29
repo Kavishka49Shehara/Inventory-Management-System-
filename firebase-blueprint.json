@@ -122,6 +122,25 @@
         "payload": { "type": "object" }
       },
       "required": ["id", "timestamp", "device", "type"]
+    },
+    "ESPCommand": {
+      "title": "ESPCommand",
+      "description": "Hardware control dispatch document polled by ESP32 via Firestore REST API",
+      "type": "object",
+      "properties": {
+        "commandId": { "type": "string" },
+        "operation": { "type": "string", "enum": ["DEFECT_INTAKE_SORT", "REPLACEMENT_DELIVER", "IDLE"] },
+        "productId": { "type": "string" },
+        "productName": { "type": "string" },
+        "activeGate": { "type": "number" },
+        "bin": { "type": "string" },
+        "conveyorDirection": { "type": "string", "enum": ["FORWARD", "REVERSE", "STOP"] },
+        "conveyorDuration": { "type": "number" },
+        "gateOpenTime": { "type": "number" },
+        "gateReturnTime": { "type": "number" },
+        "status": { "type": "string", "enum": ["PENDING", "COMPLETED", "EXECUTING"] }
+      },
+      "required": ["commandId", "operation", "status"]
     }
   },
   "firestore": {
@@ -148,6 +167,10 @@
     "/esp_logs/{logId}": {
       "schema": "ESP32CommandLog",
       "description": "Hardware command log stream"
+    },
+    "/espCommands/{commandDoc}": {
+      "schema": "ESPCommand",
+      "description": "Active hardware command document read by ESP32 REST client"
     }
   }
 }

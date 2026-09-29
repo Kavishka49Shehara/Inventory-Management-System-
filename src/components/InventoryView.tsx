@@ -27,6 +27,7 @@ interface InventoryViewProps {
   onRefreshData?: () => Promise<void>;
   currentUser?: any;
   onOpenScanner?: () => void;
+  onOpenQRSheet?: () => void;
 }
 
 export default function InventoryView({ 
@@ -35,7 +36,8 @@ export default function InventoryView({
   onDeleteProduct,
   onRefreshData,
   currentUser,
-  onOpenScanner
+  onOpenScanner,
+  onOpenQRSheet
 }: InventoryViewProps) {
   const [search, setSearch] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('ALL');
@@ -180,6 +182,16 @@ export default function InventoryView({
           <p className="text-xs text-slate-400 font-mono mt-0.5">MANAGE RESTRICTED STORAGE PRODUCTS AND BIN DESIGNATION</p>
         </div>
         <div className="flex flex-wrap items-center gap-2.5">
+          {onOpenQRSheet && (
+            <button
+              onClick={onOpenQRSheet}
+              className="bg-indigo-500/15 hover:bg-indigo-500/25 text-indigo-300 border border-indigo-500/35 font-bold px-3.5 py-2.5 rounded-lg text-xs flex items-center gap-2 uppercase tracking-wide transition-all font-mono shadow-sm"
+              title="View, Test, and Print All Scannable Component QR Codes Sheet"
+            >
+              <QrCode className="w-4 h-4 text-indigo-400" />
+              <span>Component QR Codes Sheet</span>
+            </button>
+          )}
           <button
             onClick={() => onOpenScanner ? onOpenScanner() : setIsScannerOpen(true)}
             className="bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 border border-emerald-500/35 font-bold px-3.5 py-2.5 rounded-lg text-xs flex items-center gap-2 uppercase tracking-wide transition-all font-mono shadow-sm"

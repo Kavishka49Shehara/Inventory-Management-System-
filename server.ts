@@ -10,6 +10,7 @@ import {
   getDocs, 
   doc, 
   setDoc, 
+  updateDoc,
   deleteDoc,
   terminate,
   setLogLevel
@@ -513,6 +514,17 @@ function writeDb(data: DatabaseSchema) {
     syncDiffToFirestore(data, oldDb).catch(err => {
       console.error("Background Firestore difference sync failed:", err);
     });
+  }
+}
+
+// Write IoT ESP32 dispatch document directly to Firestore espCommands/current
+async function syncESPCommandToFirestore(commandData: any) {
+  if (!useFirestore || !firestoreDb) return;
+  try {
+    await setDoc(doc(firestoreDb, 'espCommands', 'current'), commandData);
+    console.log(`[Firestore IoT] Synced espCommands/current -> ${commandData.operation} (${commandData.status}) Gate: ${commandData.activeGate || 0}`);
+  } catch (err) {
+    console.error("Error writing espCommands/current to Firestore:", err);
   }
 }
 
@@ -1091,6 +1103,22 @@ app.post('/api/operations/mechanic-scan-defect', (req, res) => {
     rack_location: product.rack_location
   });
 
+  // Write dispatch document directly to Firestore espCommands/current for ESP32
+  syncESPCommandToFirestore({
+    commandId: `CMD_${Date.now()}`,
+    operation: 'DEFECT_INTAKE_SORT',
+    productId: product.product_id,
+    productName: product.product_name,
+    activeGate: gateNumber,
+    bin: targetBin,
+    conveyorDirection: 'FORWARD',
+    conveyorDuration: 10000,
+    gateOpenTime: 1500,
+    gateReturnTime: 1500,
+    status: 'PENDING',
+    timestamp: new Date().toISOString()
+  });
+
   writeDb(db);
 
   // Auto-stop conveyor after 10 seconds
@@ -1103,6 +1131,7 @@ app.post('/api/operations/mechanic-scan-defect', (req, res) => {
       updatedDb.device_status[devIdx].last_connection = new Date().toISOString();
       writeDb(updatedDb);
     }
+    // Conveyor timeout expires locally for web UI, but leave espCommands/current intact as PENDING for ESP32 hardware!
   }, 10000);
 
   res.json({
@@ -1231,6 +1260,22 @@ app.post('/api/operations/storekeeper-scan-issue', (req, res) => {
     inventory_quantity: product.quantity
   });
 
+  // Write dispatch document directly to Firestore espCommands/current for ESP32
+  syncESPCommandToFirestore({
+    commandId: `CMD_${Date.now()}`,
+    operation: 'REPLACEMENT_DELIVER',
+    productId: product.product_id,
+    productName: product.product_name,
+    activeGate: 0,
+    bin: 'Mechanic Bay',
+    conveyorDirection: 'REVERSE',
+    conveyorDuration: 10000,
+    gateOpenTime: 0,
+    gateReturnTime: 0,
+    status: 'PENDING',
+    timestamp: new Date().toISOString()
+  });
+
   writeDb(db);
 
   // Auto-stop conveyor after 10 seconds
@@ -1243,11 +1288,7 @@ app.post('/api/operations/storekeeper-scan-issue', (req, res) => {
       updatedDb.device_status[devIdx].last_connection = new Date().toISOString();
       writeDb(updatedDb);
     }
-    activeOperation = {
-      ...activeOperation,
-      type: 'STANDBY',
-      direction: 'STOP'
-    };
+    // Delivery timeout expires locally for web UI, but leave espCommands/current intact for ESP32 hardware!
   }, 10000);
 
   res.json({
@@ -1613,6 +1654,23 @@ app.post('/api/esp/scan', (req, res) => {
     rack_location: product.rack_location,
     sorting_bin: sortingBinRaw
   });
+});
+
+// POST to mark hardware operation COMPLETED by ESP32 without deleting the command details
+app.post('/api/esp/complete', async (req, res) => {
+  const { commandId } = req.body || {};
+  if (useFirestore && firestoreDb) {
+    try {
+      await updateDoc(doc(firestoreDb, 'espCommands', 'current'), {
+        status: 'COMPLETED',
+        completedAt: new Date().toISOString()
+      });
+      console.log(`[Firestore IoT] ESP32 marked command ${commandId || 'current'} as COMPLETED`);
+    } catch (err) {
+      console.error("Error updating status to COMPLETED:", err);
+    }
+  }
+  res.json({ success: true, status: 'COMPLETED' });
 });
 
 // POST to trigger conveyor manual override or specific test command

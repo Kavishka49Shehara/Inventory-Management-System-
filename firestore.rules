@@ -79,5 +79,12 @@ service cloud.firestore {
         && request.resource.data.device in ['ESP32-C3', 'ESP32-S3'];
       allow update, delete: if false; // Append-only hardware telemetry
     }
+
+    // 7. ESP COMMANDS FOR IOT (Read by ESP32 via Firestore REST API)
+    match /espCommands/{commandDoc} {
+      allow read: if true;
+      allow create, update: if true;
+      allow delete: if false;
+    }
   }
 }
